@@ -10,5 +10,6 @@ namespace BlackMarket.Infrasructure
     {
         void Buy();
         void Sell();
+        void GetPrice();
     }
 }

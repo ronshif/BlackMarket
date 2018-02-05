@@ -3,3 +3,5 @@
 ################################################################################
 
 /.vs
+/BlackMarket/BlackMarket.Infrasructure/obj/Debug
+/BlackMarket/.vs/BlackMarket/v15/Server/sqlite3
