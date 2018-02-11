@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackMarket.Infrasructure", "BlackMarket.Infrasructure\BlackMarket.Infrasructure.csproj", "{A996A864-FF89-4A8F-8BCC-09E466B4494F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackMarket.DemoData", "BlackMarket.DemoData\BlackMarket.DemoData.csproj", "{1EEFBC81-D2E6-4A65-8237-8B9E526BDDCC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A996A864-FF89-4A8F-8BCC-09E466B4494F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A996A864-FF89-4A8F-8BCC-09E466B4494F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A996A864-FF89-4A8F-8BCC-09E466B4494F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EEFBC81-D2E6-4A65-8237-8B9E526BDDCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EEFBC81-D2E6-4A65-8237-8B9E526BDDCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EEFBC81-D2E6-4A65-8237-8B9E526BDDCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EEFBC81-D2E6-4A65-8237-8B9E526BDDCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
