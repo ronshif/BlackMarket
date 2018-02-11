@@ -25,6 +25,8 @@ namespace BlackMarket.DemoData
                 {
                     nonce = (int)(DateTime.UtcNow - epoch).TotalSeconds;
                 }
+
+                //return ((DateTime.UtcNow - epoch).TotalSeconds * 1000).ToString();
                 return (nonce++).ToString();
             }
         }

@@ -9,15 +9,17 @@ namespace BlackMarket.DemoData
 {
     class Program
     {
-        public const string apiKey = "B75fiHoSIEWr3BGRwATpNKaB7k5XyRHHjlNB3PAtt6D";
-        public const string keySecret = "4yOhkJJEJUH5n1nZrXLhKnEYyk7pr0QwdkCtzkjtYau";
-
+        public const string apiKey = "";
+        public const string keySecret = "";
+        public const string tradingSymbol = "tBTCUSD";
+        
         static void Main(string[] args)
         {
 
             BitfinexApi api = new BitfinexApi(apiKey,keySecret);
-            var tickersResp = api.GetTickers("tBTCUSD");
-            
+            var tickersResp = api.GetTickers(tradingSymbol);
+            var ordersResp = api.GetActiveOrders();
+            var positionsResp = api.GetActivePositions();
         }
     }
 }
