@@ -16,7 +16,7 @@ namespace BitfinexApi
         public string swap;
         public string pl;
     }
-    public class ActivePositionsResponse
+    public class ActivePositionsResponse : ServerResponse
     {
         public List<ActivePositionItem> positions;
         public static ActivePositionsResponse FromJSON(string response)
@@ -25,6 +25,12 @@ namespace BitfinexApi
             List<ActivePositionItem> items = JsonConvert.DeserializeObject<List<ActivePositionItem>>(response);
             return new ActivePositionsResponse(items);
         }
+
+        public override string ConvertToString()
+        {
+            throw new NotImplementedException();
+        }
+
         private ActivePositionsResponse(List<ActivePositionItem> positions)
         {
             this.positions = positions;

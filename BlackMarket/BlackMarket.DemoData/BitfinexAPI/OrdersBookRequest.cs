@@ -5,9 +5,9 @@ using System.Text;
 
 namespace BitfinexApi
 {
-    public class ActiveOrdersRequest:GenericRequest
+    public class OrdersBookRequest : GenericRequest
     {
-        public ActiveOrdersRequest(string nonce)
+        public OrdersBookRequest(string nonce)
         {
             this.nonce = nonce;
             this.request = "/v1/orders";

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using BitfinexApi;
 using Newtonsoft.Json;
 
-public class OrderStatusResponse
+public class OrderStatusResponse : ServerResponse
 {
     public string id;
     public string symbol;
@@ -27,5 +27,9 @@ public class OrderStatusResponse
         return JsonConvert.DeserializeObject<OrderStatusResponse>(response);
     }
 
+    public override string ConvertToString()
+    {
+        throw new NotImplementedException();
+    }
 }
 

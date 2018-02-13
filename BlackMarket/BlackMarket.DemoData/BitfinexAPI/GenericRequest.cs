@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace BitfinexApi
 {
-    public class GenericRequest
+    public abstract class GenericRequest
     {
         public string request;
         public string nonce;

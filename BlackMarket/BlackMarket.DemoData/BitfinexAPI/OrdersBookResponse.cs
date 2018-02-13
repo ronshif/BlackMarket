@@ -5,16 +5,22 @@ using System.Text;
 using Newtonsoft.Json;
 using BitfinexApi;
 
-public class ActiveOrdersResponse
+public class OrdersBookResponse : ServerResponse 
 {
     public List<OrderStatusResponse> orders;
 
-    public static ActiveOrdersResponse FromJSON(string response)
+    public static OrdersBookResponse FromJSON(string response)
     {
         List<OrderStatusResponse> orders = JsonConvert.DeserializeObject<List<OrderStatusResponse>>(response);
-        return new ActiveOrdersResponse(orders);
+        return new OrdersBookResponse(orders);
     }
-    private ActiveOrdersResponse(List<OrderStatusResponse> orders)
+
+    public override string ConvertToString()
+    {
+        throw new NotImplementedException();
+    }
+
+    private OrdersBookResponse(List<OrderStatusResponse> orders)
     {
         this.orders = orders;
     }

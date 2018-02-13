@@ -5,16 +5,16 @@ using System.Text;
 using Newtonsoft.Json;
 using BitfinexApi;
 
-public class TickersResponse
+public class TickerResponse : ServerResponse
 {
     public string message;
-    public TickersResponse(string message)
+    public TickerResponse(string message)
     {
         this.message = message;
     }
 
-    public override string ToString()
+    public override string ConvertToString()
     {
-        return message;
+        throw new NotImplementedException();
     }
 }

@@ -13,26 +13,24 @@ namespace BlackMarket.DemoData
     public class BitfinexApi
     {
         private DateTime epoch = new DateTime(1970, 1, 1);
-
         private HMACSHA384 hashMaker; 
         private string Key;
-        private int nonce = 0;
+        private long nonce = 0;
         private string Nonce
         {
             get
             {
                 if (nonce == 0)
                 {
-                    nonce = (int)(DateTime.UtcNow - epoch).TotalSeconds;
+                    nonce = (DateTime.UtcNow - epoch).Ticks;
                 }
 
-                //return ((DateTime.UtcNow - epoch).TotalSeconds * 1000).ToString();
                 return (nonce++).ToString();
             }
         }
-        public BitfinexApi(string key, string secret)
+        public BitfinexApi(string key, string secretKey)
         {
-            hashMaker = new HMACSHA384(Encoding.UTF8.GetBytes(secret));
+            hashMaker = new HMACSHA384(Encoding.UTF8.GetBytes(secretKey));
             this.Key = key;
         }
 
@@ -46,18 +44,18 @@ namespace BlackMarket.DemoData
             return sb.ToString();
         }
       
-        public TickersResponse GetTickers(string symbol)
+        public TickerResponse GetTicker(string symbol)
         {
-            TickersRequest req = new TickersRequest(Nonce, symbol);
-            string response = SendRequest(req, "GET");
-            return new TickersResponse(response);
+            TickerRequest req = new TickerRequest(symbol);
+            string response = SendRequest(req, "GET",false);
+            return new TickerResponse(response);
         }
 
-        public ActiveOrdersResponse GetActiveOrders()
+        public OrdersBookResponse GetActiveOrders()
         {
-            ActiveOrdersRequest req = new ActiveOrdersRequest(Nonce);
+            OrdersBookRequest req = new OrdersBookRequest(Nonce);
             string response = SendRequest(req, "POST");
-            return ActiveOrdersResponse.FromJSON(response);
+            return OrdersBookResponse.FromJSON(response);
         }
 
         public ActivePositionsResponse GetActivePositions()
@@ -67,19 +65,24 @@ namespace BlackMarket.DemoData
             return ActivePositionsResponse.FromJSON(response);
         }
 
-        private string SendRequest(GenericRequest request,string httpMethod)
+        private string SendRequest(GenericRequest request,string httpMethod,bool isAuth=true)
         {
-            string json = JsonConvert.SerializeObject(request);
-            string json64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
-            byte[] data = Encoding.UTF8.GetBytes(json64);
-            byte[] hash = hashMaker.ComputeHash(data);
-            string signature = GetHexString(hash);
+            HttpWebRequest wr = WebRequest.Create("https://api.bitfinex.com" + request.request) as HttpWebRequest;
 
-            HttpWebRequest wr = WebRequest.Create("https://api.bitfinex.com"+request.request) as HttpWebRequest;
-            wr.Headers.Add("X-BFX-APIKEY", Key);
-            wr.Headers.Add("X-BFX-PAYLOAD", json64);
-            wr.Headers.Add("X-BFX-SIGNATURE", signature);
-            wr.Method = httpMethod;
+            //if (isAuth)
+            {
+                string json = JsonConvert.SerializeObject(request);
+                string json64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+                byte[] data = Encoding.UTF8.GetBytes(json64);
+                byte[] hash = hashMaker.ComputeHash(data);
+                string signature = GetHexString(hash);
+
+                wr.Headers.Add("X-BFX-APIKEY", Key);
+                wr.Headers.Add("X-BFX-PAYLOAD", json64);
+                wr.Headers.Add("X-BFX-SIGNATURE", signature);
+                wr.Method = httpMethod;
+            }
+
             
             string response = null;
             try
@@ -98,5 +101,6 @@ namespace BlackMarket.DemoData
             }
             return response;
         }
+
     }
 }

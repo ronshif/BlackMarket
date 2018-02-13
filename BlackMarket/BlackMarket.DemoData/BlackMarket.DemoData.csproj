@@ -66,18 +66,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitfinexAPI\ActiveOrdersRequest.cs" />
-    <Compile Include="BitfinexAPI\ActiveOrdersResponse.cs" />
+    <Compile Include="BitfinexAPI\OrdersBookRequest.cs" />
+    <Compile Include="BitfinexAPI\OrdersBookResponse.cs" />
     <Compile Include="BitfinexAPI\ActivePositionsRequest.cs" />
     <Compile Include="BitfinexAPI\ActivePositionsResponse.cs" />
     <Compile Include="BitfinexAPI\BitfinexApi.cs" />
     <Compile Include="BitfinexAPI\BitfinexException.cs" />
     <Compile Include="BitfinexAPI\GenericRequest.cs" />
     <Compile Include="BitfinexAPI\OrderStatusResponse.cs" />
-    <Compile Include="BitfinexAPI\TickersResponse.cs" />
+    <Compile Include="BitfinexAPI\ServerResponse.cs" />
+    <Compile Include="BitfinexAPI\TickerResponse.cs" />
+    <Compile Include="DataCollector.cs" />
+    <Compile Include="FileManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BitfinexAPI\TickersRequest.cs" />
+    <Compile Include="BitfinexAPI\TickerRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
