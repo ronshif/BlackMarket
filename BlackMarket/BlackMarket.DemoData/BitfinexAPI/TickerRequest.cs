@@ -7,8 +7,9 @@ using BitfinexApi;
 
 class TickerRequest : GenericRequest
 {
-    public TickerRequest(string symbol)
+    public TickerRequest(string nonce, string symbol)
     {
+        this.nonce = nonce;
         this.request = string.Format("/v1/pubticker/{0}", symbol);
     }
 }

@@ -15,14 +15,14 @@ namespace BlackMarket.DemoData
         private DateTime epoch = new DateTime(1970, 1, 1);
         private HMACSHA384 hashMaker; 
         private string Key;
-        private long nonce = 0;
+        private int nonce = 0;
         private string Nonce
         {
             get
             {
                 if (nonce == 0)
                 {
-                    nonce = (DateTime.UtcNow - epoch).Ticks;
+                    nonce = (int)(DateTime.UtcNow - epoch).TotalSeconds;
                 }
 
                 return (nonce++).ToString();
@@ -46,44 +46,27 @@ namespace BlackMarket.DemoData
       
         public TickerResponse GetTicker(string symbol)
         {
-            TickerRequest req = new TickerRequest(symbol);
+            TickerRequest req = new TickerRequest(Nonce, symbol);
             string response = SendRequest(req, "GET",false);
-            return new TickerResponse(response);
-        }
-
-        public OrdersBookResponse GetActiveOrders()
-        {
-            OrdersBookRequest req = new OrdersBookRequest(Nonce);
-            string response = SendRequest(req, "POST");
-            return OrdersBookResponse.FromJSON(response);
-        }
-
-        public ActivePositionsResponse GetActivePositions()
-        {
-            ActivePositionsRequest req = new ActivePositionsRequest(Nonce);
-            string response = SendRequest(req, "POST");
-            return ActivePositionsResponse.FromJSON(response);
+            return TickerResponse.FromJSON(response);
         }
 
         private string SendRequest(GenericRequest request,string httpMethod,bool isAuth=true)
         {
+
+            string json = JsonConvert.SerializeObject(request);
+            string json64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+            byte[] data = Encoding.UTF8.GetBytes(json64);
+            byte[] hash = hashMaker.ComputeHash(data);
+            string signature = GetHexString(hash);
+
             HttpWebRequest wr = WebRequest.Create("https://api.bitfinex.com" + request.request) as HttpWebRequest;
 
-            //if (isAuth)
-            {
-                string json = JsonConvert.SerializeObject(request);
-                string json64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
-                byte[] data = Encoding.UTF8.GetBytes(json64);
-                byte[] hash = hashMaker.ComputeHash(data);
-                string signature = GetHexString(hash);
+            wr.Headers.Add("X-BFX-APIKEY", Key);
+            wr.Headers.Add("X-BFX-PAYLOAD", json64);
+            wr.Headers.Add("X-BFX-SIGNATURE", signature);
+            wr.Method = httpMethod;
 
-                wr.Headers.Add("X-BFX-APIKEY", Key);
-                wr.Headers.Add("X-BFX-PAYLOAD", json64);
-                wr.Headers.Add("X-BFX-SIGNATURE", signature);
-                wr.Method = httpMethod;
-            }
-
-            
             string response = null;
             try
             {

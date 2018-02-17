@@ -9,13 +9,26 @@ namespace BlackMarket.DemoData
 {
     public static class FileManager
     {
-        private static long maximumFileSize = 1500; // measure unit is bytes
+        private static long maximumFileSize = 40000; // measure unit is bytes
         private static int i = 1;
-        private const string rootDirPath = @"c:\Output";
-
+        private const string rootDirPath = @"c:\DemoData";
+        private static string PL_NAME = "Bitfinex";
+        private static object obj;
         static FileManager()
         {
-           Directory.CreateDirectory(rootDirPath);
+            if (Directory.Exists(rootDirPath))
+            {
+                string[] filePaths = Directory.GetFiles(rootDirPath);
+                foreach (string filePath in filePaths)
+                {
+                    File.Delete(filePath);
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(rootDirPath);
+            }
+            obj = new Object();
         }
 
         private static string FilePath
@@ -30,21 +43,40 @@ namespace BlackMarket.DemoData
         {
             get
             {
-                return String.Format("log_{0}",i.ToString());
+                return String.Format("{0}_log_{1}",PL_NAME,i.ToString());
             }
         }
 
-        public static void SaveLine(string line)
+        internal static void AppendResponse(TickerResponse response)
         {
-            if(File.Exists(FilePath) && new FileInfo(FilePath).Length > maximumFileSize)
+            if (response == null)
             {
-                // move to the next file
-                i++;
+                return;
             }
-            using (StreamWriter w = File.AppendText(FilePath))
+            lock (obj)
             {
-                w.WriteLine(line);
-            }    
+                if (File.Exists(FilePath) && new FileInfo(FilePath).Length > maximumFileSize)
+                {
+                    // move to the next file
+                    i++;
+                }
+
+                try
+                {
+                    using (StreamWriter w = File.AppendText(FilePath))
+                    {
+                        Console.WriteLine(String.Format("Response: {0}", response.jsonResponse));
+                        Console.WriteLine(String.Format("Appending response to log file {0}",FileName));
+
+                        w.WriteLine(response.jsonResponse);
+                    }
+                }
+                catch (IOException exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
+            }
         }
+
     }
 }

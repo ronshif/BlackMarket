@@ -5,16 +5,21 @@ using System.Text;
 using Newtonsoft.Json;
 using BitfinexApi;
 
-public class TickerResponse : ServerResponse
+[JsonObject]
+public class TickerResponse 
 {
-    public string message;
-    public TickerResponse(string message)
+    public TickerStatusResponse tickerStatus;
+    public string jsonResponse;
+
+    TickerResponse(TickerStatusResponse stats, string jsonResponse)
     {
-        this.message = message;
+        this.jsonResponse = jsonResponse;
+        this.tickerStatus = stats;
     }
 
-    public override string ConvertToString()
+    public static TickerResponse FromJSON(string response)
     {
-        throw new NotImplementedException();
+        TickerStatusResponse ticker = JsonConvert.DeserializeObject<TickerStatusResponse>(response);
+        return new TickerResponse(ticker, response);
     }
 }
